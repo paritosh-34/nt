@@ -8,7 +8,7 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def home():
-    return redirect('/login')
+    return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
