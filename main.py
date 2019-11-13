@@ -1,9 +1,9 @@
 from flask import Flask, render_template, redirect, request
-from flask_pymongo import PyMongo
+#from flask_pymongo import PyMongo
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb://localhost/nt'
-mongo = PyMongo(app)
+#app.config['MONGO_URI'] = 'mongodb://localhost/nt'
+#mongo = PyMongo(app)
 
 
 @app.route('/')
@@ -16,7 +16,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         passw = request.form.get('pass')
-        result = mongo.db.nt.find_one({"passw": passw, "email": email})
+       # result = mongo.db.nt.find_one({"passw": passw, "email": email})
     return render_template('login.html')
 
 
