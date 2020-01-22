@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+app.secret_key = "super-secret-key"
 app.config['MONGO_URI'] = 'mongodb://localhost/nt'
 mongo = PyMongo(app)
 
@@ -16,12 +17,30 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         passw = request.form.get('pass')
-        result = mongo.db.nt.find_one({"passw": passw, "email": email})
+        print(email)
+        print(passw)
+        result = mongo.db.nt.find_one({"email": email, "password": passw})
+        print(result)
+        if result is None:
+            return render_template('login.html', i="invalid Id/Password")
+        else:
+            session['user'] = email
+            return "Welcome "+result['name']+"!"
     return render_template('login.html')
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if request.method == 'POST':
+        print("in if")
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('pass')
+        print(name, email, password)
+        result = mongo.db.nt.insert({"name": name, "email": email, "password": password})
+        print(result)
+        return "Ok we got it!"
+    print("h")
     return render_template('signup.html')
 
 
